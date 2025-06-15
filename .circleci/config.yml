@@ -2,9 +2,12 @@
 version: 2.1
 
 jobs:
-  build:
+  test:
+    parameters:
+      node-version:
+        type: string
     docker:
-      - image: cimg/node:18.16
+      - image: cimg/node:<< parameters.node-version >>
     steps:
       - checkout
       - run: npm install
@@ -12,6 +15,9 @@ jobs:
 
 workflows:
   version: 2
-  build-and-test:
+  test-matrix:
     jobs:
-      - build
+      - test:
+          matrix:
+            parameters:
+              node-version: ["16.20", "18.16"]
